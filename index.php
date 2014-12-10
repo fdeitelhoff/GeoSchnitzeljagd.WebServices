@@ -1,9 +1,5 @@
 <?php
 
-/*print_r($_REQUEST);
-
-print_r($_SERVER);*/
-
 echo "Request method:\n";
 echo $_SERVER['REQUEST_METHOD'] . "\n";
 
