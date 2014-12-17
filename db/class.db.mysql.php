@@ -121,6 +121,10 @@ class db {
       $this->setError();
     }        
   }
+
+  public function escapeInput($input) {
+    return $this->link->real_escape_string($input);
+  }
    
   /* FD, 2004-11-20: Diese Methode dient zum holen eines Resultssets. Es werden die Modi MYSQI_ASSOC, MYSQLI_NUM und MYSQLI_BOTH
                      unterst�tzt. Standard ist MYSQLI_ASSOC, was ein assoziatives array zur�ckgibt.
