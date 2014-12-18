@@ -32,7 +32,7 @@ class users {
             case 'PUT':
                 break;
             case 'POST':
-                return $this->createUser($parameter, $body);
+                return $this->createUser($body);
                 break;
             case 'DELETE':
                 break;
@@ -43,7 +43,7 @@ class users {
         $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM Users WHERE UID = " . $this->db->escapeInput($parameter));
 
         if ($this->db->getError()) {
-            throw new Exception($this->db->getError());
+            throw new Exception($this->db->getErrorMsg());
         }
 
         $data = array();
@@ -55,10 +55,37 @@ class users {
         return json_encode($data);
     }
 
-    private function createUser($parameter, $body) {
-        $this->db->newQuery("INS");
+    private function createUser($body) {
+        $user = new user(json_decode($body, true));
 
-        return "OK " . $body;
+        if (!$this->userExists($user)) {
+            $this->db->newQuery("INSERT INTO Users (Username, Password, Timestamp) VALUES ('" .
+                $this->db->escapeInput($user->getUsername()) . "', '" .
+                $this->db->escapeInput($user->getPassword()) . "', " .
+                $this->db->escapeInput(strtotime($user->getTimestamp())) . ")");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            $user->setUid($this->db->getLastInsertID());
+
+            throw new RestStatus(201, "The user was successfully created!", $user);
+        }
+        else
+        {
+            throw new RestStatus(409, "The user already exists!");
+        }
+    }
+
+    private function userExists($user) {
+        $this->db->newQuery("SELECT Count(*) FROM Users WHERE Username = '" . $this->db->escapeInput($user->getUsername()) . "'");
+
+        if ($this->db->getError()) {
+            throw new Exception($this->db->getErrorMsg());
+        }
+
+        return $this->db->getResult() == 0 ? false : true;
     }
 }
 
