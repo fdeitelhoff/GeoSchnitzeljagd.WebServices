@@ -14,4 +14,5 @@ try {
 } catch (RestStatus $status) {
     echo $status->toJson();
 }
+
 ?>
