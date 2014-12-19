@@ -43,7 +43,8 @@ class users {
 
     private function getWithId($parameter) {
         if (empty($parameter)) {
-            throw new RestStatus(400, "Parameters are missing!");
+            $status = new RestStatus(400, "Parameters are missing!");
+            return $status->toJson();
         }
 
         $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM Users WHERE UID = '" . $this->db->escapeInput($parameter) . "'");
@@ -63,7 +64,8 @@ class users {
 
     private function createUser($body) {
         if (empty($body)) {
-            throw new RestStatus(400, "Content is missing!");
+            $status = new RestStatus(400, "Content is missing!");
+            return $status->toJson();
         }
 
         $user = new user(json_decode($body, true));
@@ -82,17 +84,20 @@ class users {
 
             $user->setUid($uuid);
 
-            throw new RestStatus(201, "The user was successfully created!", $user);
+            $status = new RestStatus(201, "The user was successfully created!", $user);
+            return $status->toJson();
         }
         else
         {
-            throw new RestStatus(409, "A user with this name already exists!");
+            $status = new RestStatus(409, "A user with this name already exists!");
+            return $status->toJson();
         }
     }
 
     private function updateUser($body) {
         if (empty($body)) {
-            throw new RestStatus(400, "Content is missing!");
+            $status = new RestStatus(400, "Content is missing!");
+            return $status->toJson();
         }
 
         $user = new user(json_decode($body, true));
@@ -112,16 +117,19 @@ class users {
                 throw new RestStatus(500, "The user was not updated successfully!", $user);
             }
 
-            throw new RestStatus(200, "The user was successfully updated!", $user);
+            $status = new RestStatus(200, "The user was successfully updated!", $user);
+            return $status->toJson();
         }
         else {
-            throw new RestStatus(409, "A user with this name already exists!");
+            $status = new RestStatus(409, "A user with this name already exists!");
+            return $status->toJson();
         }
     }
 
     private function deleteUser($parameter) {
         if (empty($parameter)) {
-            throw new RestStatus(400, "Parameters are missing!");
+            $status = new RestStatus(400, "Parameters are missing!");
+            return $status->toJson();
         }
 
         if ($this->userExistsWithId($parameter)) {
@@ -131,11 +139,13 @@ class users {
                 throw new Exception($this->db->getErrorMsg());
             }
 
-            throw new RestStatus(200, "The user was successfully deleted!");
+            $status = new RestStatus(200, "The user was successfully deleted!");
+            return $status->toJson();
         }
         else
         {
-            throw new RestStatus(404, "The user does not exists!");
+            $status =new RestStatus(404, "The user does not exists!");
+            return $status->toJson();
         }
     }
 

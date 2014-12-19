@@ -1,18 +1,21 @@
 <?php
 
-try {
-    require_once(__DIR__ . '/conf/global.php');
+require_once(__DIR__ . '/conf/global.php');
 
-    $routing = new restRoute($db, ["user", "users"],
-                             $users);
+$auth = new Auth($db, $_SERVER);
 
-    echo $routing->route($_REQUEST['request'],
-                         $_REQUEST['param'],
-                         $_SERVER['REQUEST_METHOD'],
-                         file_get_contents('php://input'));
-
-} catch (RestStatus $status) {
+if (!$auth->authorize()) {
+    $status = new RestStatus(401, "You're not authorized!");
     echo $status->toJson();
+    exit;
 }
 
+$routing = new restRoute($db,
+                         ["user", "users"],
+                         $users);
+
+echo $routing->route($_REQUEST['request'],
+                     $_REQUEST['param'],
+                     $_SERVER['REQUEST_METHOD'],
+                     file_get_contents('php://input'));
 ?>

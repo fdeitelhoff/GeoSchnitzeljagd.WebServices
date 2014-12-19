@@ -1,6 +1,6 @@
 <?php
 
-class RestStatus extends Exception {
+class RestStatus {
 
     private $statusCode;
     private $response;
