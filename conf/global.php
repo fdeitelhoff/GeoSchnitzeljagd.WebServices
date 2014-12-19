@@ -9,6 +9,8 @@ function exception_handler($exception) {
 
 set_exception_handler('exception_handler');
 
+require_once(__DIR__ . '/../common/functions.common.php');
+
 require_once(__DIR__ . '/config.php');
 
 require_once(__DIR__ . '/../db/class.db.mysql.php');
