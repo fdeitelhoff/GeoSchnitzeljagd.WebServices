@@ -2,17 +2,23 @@
 
 require_once(__DIR__ . '/conf/global.php');
 
+$db = new db($server, $user, $password, $database, true, true, true);
+
+$users = new users($db);
+$paperchases = new Paperchases($db);
+
 $auth = new Auth($db, $_SERVER);
 
-if (!$auth->authorize()) {
+/*if (!$auth->authorize()) {
     $status = new RestStatus(401, "You're not authorized!");
     echo $status->toJson();
     exit;
-}
+}*/
 
 $routing = new restRoute($db,
-                         ["user", "users"],
-                         $users);
+                         ['users', 'user', 'paperchases'],
+                         $users,
+                         $paperchases);
 
 echo $routing->route($_REQUEST['request'],
                      $_REQUEST['param'],

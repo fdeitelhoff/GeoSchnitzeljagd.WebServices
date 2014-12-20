@@ -6,12 +6,14 @@ class restRoute {
 	private $routes;
 
 	private $users;
+	private $paperchases;
 
-	function __construct($db, $routes, $users) {
+	function __construct($db, $routes, $users, $paperchases) {
 		$this->db = $db;
 		$this->routes = $routes;
 
 		$this->users = $users;
+		$this->paperchases = $paperchases;
 	}
 
 	public function route($route, $parameter, $method, $body) {
@@ -22,12 +24,17 @@ class restRoute {
 		}
 	
 		switch ($route) {
-			case 'user':
-				return $this->users->withId($parameter, $method, $body);
-				break;
 			case 'users':
 				return $this->users->all();
 				break;
+			case 'user':
+				return $this->users->withId($parameter, $method, $body);
+				break;
+			case 'paperchases':
+				return $this->paperchases->all();
+				break;
+			default:
+
 		}
 	}
 }

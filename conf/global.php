@@ -17,14 +17,11 @@ require_once(__DIR__ . '/../auth/class.auth.php');
 
 require_once(__DIR__ . '/../db/class.db.mysql.php');
 require_once(__DIR__ . '/../db/class.db.users.php');
+require_once(__DIR__ . '/../db/class.db.paperchases.php');
 
 require_once(__DIR__ . '/../model/class.model.user.php');
 
 require_once(__DIR__ . '/../rest/class.rest.routing.php');
 require_once(__DIR__ . '/../rest/class.rest.status.php');
-
-$db = new db($server, $user, $password, $database, true, true, true);
-
-$users = new users($db);
 
 ?>
