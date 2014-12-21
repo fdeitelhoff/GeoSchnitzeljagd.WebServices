@@ -16,6 +16,7 @@ require_once(__DIR__ . '/../common/functions.common.php');
 require_once(__DIR__ . '/../auth/class.auth.php');
 
 require_once(__DIR__ . '/../db/class.db.mysql.php');
+require_once(__DIR__ . '/../log/class.db.logging.php');
 require_once(__DIR__ . '/../db/class.db.users.php');
 require_once(__DIR__ . '/../db/class.db.paperchases.php');
 
