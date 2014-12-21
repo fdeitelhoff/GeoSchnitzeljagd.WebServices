@@ -62,6 +62,10 @@ class users {
         return json_encode($data);
     }
 
+    public function register($body) {
+        return $this->createUser($body);
+    }
+
     private function createUser($body) {
         if (empty($body)) {
             $status = new RestStatus(400, "Content is missing!");
@@ -71,10 +75,10 @@ class users {
         $user = new user(json_decode($body, true));
 
         if (!$this->userExistsWithName($user)) {
-            $uuid = GUID();
+            $timestamp = date('Y-m-d H:m:s');
 
             $this->db->newQuery("INSERT INTO Users (UID, Username, Password) VALUES (" .
-                "'" . $uuid . "', '" .
+                "'" . $this->db->escapeInput($user->getUid()) . "', '" .
                 $this->db->escapeInput($user->getUsername()) . "', '" .
                 $this->db->escapeInput($user->getPassword()) . "')");
 
@@ -82,13 +86,12 @@ class users {
                 throw new Exception($this->db->getErrorMsg());
             }
 
-            $user->setUid($uuid);
+            $user->setTimestamp($timestamp);
 
             $status = new RestStatus(201, "The user was successfully created!", $user);
             return $status->toJson();
         }
-        else
-        {
+        else {
             $status = new RestStatus(409, "A user with this name already exists!");
             return $status->toJson();
         }

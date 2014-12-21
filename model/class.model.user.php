@@ -37,6 +37,10 @@ class user {
         return $this->Timestamp;
     }
 
+    public function setTimestamp($timestamp) {
+        $this->Timestamp = $timestamp;
+    }
+
     public function toArray() {
         return get_object_vars($this);
     }

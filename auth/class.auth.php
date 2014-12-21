@@ -20,6 +20,10 @@ class Auth {
     }
 
     public function authorize() {
+        if (empty($this->username) || empty($this->password)) {
+            return false;
+        }
+
         $this->db->newQuery("SELECT Count(*) FROM Users WHERE Username = '" .
                             $this->db->escapeInput($this->username) . "' AND Password = '" .
                             $this->db->escapeInput($this->password) . "'");
