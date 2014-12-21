@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/conf/global.php');
 
-$db = new db($server, $user, $password, $database, false, false, false);
+$db = new Db($server, $user, $password, $database, false, false, false);
 
 $logging = new Logging($db,
                        $_SERVER,
@@ -11,10 +11,10 @@ $logging = new Logging($db,
 
 $logging->log();
 
-$users = new users($db);
+$users = new Users($db);
 $paperchases = new Paperchases($db);
 
-$routing = new restRoute($db,
+$routing = new RestRoute($db,
                          $_SERVER,
                          $_REQUEST,
                          ['users', 'user', 'paperchases'],

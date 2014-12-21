@@ -1,6 +1,6 @@
 <?php
 
-class users {
+class Users {
 
     private $db;
 
@@ -72,7 +72,7 @@ class users {
             return $status->toJson();
         }
 
-        $user = new user(json_decode($body, true));
+        $user = new User(json_decode($body, true));
 
         if (!$this->userExistsWithName($user)) {
             $timestamp = date('Y-m-d H:m:s');
@@ -103,7 +103,7 @@ class users {
             return $status->toJson();
         }
 
-        $user = new user(json_decode($body, true));
+        $user = new User(json_decode($body, true));
 
         if (!$this->userExistsWithId($user->getUid())) {
             throw new RestStatus(404, "The user does not exists!");
@@ -147,7 +147,7 @@ class users {
         }
         else
         {
-            $status =new RestStatus(404, "The user does not exists!");
+            $status = new RestStatus(404, "The user does not exists!");
             return $status->toJson();
         }
     }

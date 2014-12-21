@@ -1,6 +1,6 @@
 <?php
 
-class restRoute {
+class RestRoute {
 
 	private $db;
 
