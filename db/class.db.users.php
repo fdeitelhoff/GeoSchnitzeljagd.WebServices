@@ -106,24 +106,30 @@ class Users {
         $user = new User(json_decode($body, true));
 
         if (!$this->userExistsWithId($user->getUid())) {
-            throw new RestStatus(404, "The user does not exists!");
+            $status = new RestStatus(404, "The user does not exists!");
+            return $status->toJson();
+
         } else if (!$this->userExistsWithName($user)) {
+            $timestamp = date('Y-m-d H:m:s');
+
             $this->db->newQuery("UPDATE users SET Username = '" . $this->db->escapeInput($user->getUsername()) .
-                "', Password = '" . $this->db->escapeInput($user->getPassword()) .
-                "', Timestamp = NOW() WHERE UID = '" . $this->db->escapeInput($user->getUid()) . "'");
+                "', Timestamp = '" . $timestamp . "' WHERE UID = '" . $this->db->escapeInput($user->getUid()) . "'");
 
             if ($this->db->getError()) {
                 throw new Exception($this->db->getErrorMsg());
             }
 
             if ($this->db->getAffectedRowCount() != 1) {
-                throw new RestStatus(500, "The user was not updated successfully!", $user);
+                $status = new RestStatus(500, "The user was not updated successfully!", $user);
+                return $status->toJson();
             }
+
+            $user->setTimestamp($timestamp);
 
             $status = new RestStatus(200, "The user was successfully updated!", $user);
             return $status->toJson();
-        }
-        else {
+
+        } else {
             $status = new RestStatus(409, "A user with this name already exists!");
             return $status->toJson();
         }
