@@ -4,10 +4,14 @@ require_once(__DIR__ . '/conf/global.php');
 
 $db = new Db($server, $user, $password, $database, false, false, false);
 
+// In some PHP versions this input stream can only be read once.
+// So we read it just once here!
+$body = file_get_contents('php://input');
+
 $logging = new Logging($db,
                        $_SERVER,
                        $_REQUEST,
-                       file_get_contents('php://input'));
+                       $body);
 
 $logging->log();
 
@@ -21,6 +25,6 @@ $routing = new RestRoute($db,
                          $users,
                          $paperchases);
 
-echo $routing->route(file_get_contents('php://input'));
+echo $routing->route($body);
 
 ?>
