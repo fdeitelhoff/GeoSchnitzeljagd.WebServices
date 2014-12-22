@@ -7,20 +7,16 @@ class RestRoute {
 	private $server;
 	private $request;
 
-	private $routes;
-
 	private $auth;
 
 	private $users;
 	private $paperchases;
 
-	function __construct($db, $server, $request, $routes, $users, $paperchases) {
+	function __construct($db, $server, $request, $users, $paperchases) {
 		$this->db = $db;
 
 		$this->server = $server;
 		$this->request = $request;
-
-		$this->routes = $routes;
 
 		$this->auth = new Auth($db, $server);
 

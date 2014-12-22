@@ -21,7 +21,6 @@ $paperchases = new Paperchases($db);
 $routing = new RestRoute($db,
                          $_SERVER,
                          $_REQUEST,
-                         ['users', 'user', 'paperchases'],
                          $users,
                          $paperchases);
 
