@@ -24,7 +24,7 @@ class Auth {
             return false;
         }
 
-        $this->db->newQuery("SELECT Count(*) FROM Users WHERE Username = '" .
+        $this->db->newQuery("SELECT Count(*) FROM users WHERE Username = '" .
                             $this->db->escapeInput($this->username) . "' AND Password = '" .
                             $this->db->escapeInput($this->password) . "'");
 

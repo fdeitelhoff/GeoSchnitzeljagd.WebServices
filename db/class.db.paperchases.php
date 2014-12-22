@@ -9,7 +9,7 @@ class Paperchases {
     }
 
     public function all() {
-        $this->db->newQuery("SELECT Paperchases.PID, UID, Name, Timestamp FROM Paperchases INNER JOIN Marks ON Paperchases.PID = Marks.PID");
+        $this->db->newQuery("SELECT paperchases.PID, UID, Name, Timestamp FROM paperchases INNER JOIN marks ON paperchases.PID = marks.PID");
 
         if ($this->db->getError()) {
             throw new Exception($this->db->getErrorMsg());

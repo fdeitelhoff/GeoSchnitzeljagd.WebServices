@@ -29,7 +29,7 @@ class Logging {
 
         $timestamp = date('Y-m-d H:m:s');
 
-        $this->db->newQuery("INSERT INTO Logging (Method, Route, Parameter, Body, User) VALUES (" .
+        $this->db->newQuery("INSERT INTO logging (Method, Route, Parameter, Body, User) VALUES (" .
             "'" . $this->db->escapeInput($method) . "', '" .
             $this->db->escapeInput($route) . "', '" .
             $this->db->escapeInput($parameter) . "', '" .

@@ -9,7 +9,7 @@ class Users {
     }
 
     public function all() {
-        $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM Users");
+        $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM users");
 
 		if ($this->db->getError()) {
 			throw new Exception($this->db->getErrorMsg());
@@ -47,7 +47,7 @@ class Users {
             return $status->toJson();
         }
 
-        $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM Users WHERE UID = '" . $this->db->escapeInput($parameter) . "'");
+        $this->db->newQuery("SELECT UID, Username, Password, Timestamp FROM users WHERE UID = '" . $this->db->escapeInput($parameter) . "'");
 
         if ($this->db->getError()) {
             throw new Exception($this->db->getErrorMsg());
@@ -77,7 +77,7 @@ class Users {
         if (!$this->userExistsWithName($user)) {
             $timestamp = date('Y-m-d H:m:s');
 
-            $this->db->newQuery("INSERT INTO Users (UID, Username, Password) VALUES (" .
+            $this->db->newQuery("INSERT INTO users (UID, Username, Password) VALUES (" .
                 "'" . $this->db->escapeInput($user->getUid()) . "', '" .
                 $this->db->escapeInput($user->getUsername()) . "', '" .
                 $this->db->escapeInput($user->getPassword()) . "')");
@@ -108,7 +108,7 @@ class Users {
         if (!$this->userExistsWithId($user->getUid())) {
             throw new RestStatus(404, "The user does not exists!");
         } else if (!$this->userExistsWithName($user)) {
-            $this->db->newQuery("UPDATE Users SET Username = '" . $this->db->escapeInput($user->getUsername()) .
+            $this->db->newQuery("UPDATE users SET Username = '" . $this->db->escapeInput($user->getUsername()) .
                 "', Password = '" . $this->db->escapeInput($user->getPassword()) .
                 "', Timestamp = NOW() WHERE UID = '" . $this->db->escapeInput($user->getUid()) . "'");
 
@@ -136,7 +136,7 @@ class Users {
         }
 
         if ($this->userExistsWithId($parameter)) {
-            $this->db->newQuery("DELETE FROM Users WHERE UID = '" . $this->db->escapeInput($parameter) . "'");
+            $this->db->newQuery("DELETE FROM users WHERE UID = '" . $this->db->escapeInput($parameter) . "'");
 
             if ($this->db->getError()) {
                 throw new Exception($this->db->getErrorMsg());
@@ -153,7 +153,7 @@ class Users {
     }
 
     private function userExistsWithName($user) {
-        $this->db->newQuery("SELECT Count(*) FROM Users WHERE Username = '" . $this->db->escapeInput($user->getUsername()) . "'");
+        $this->db->newQuery("SELECT Count(*) FROM users WHERE Username = '" . $this->db->escapeInput($user->getUsername()) . "'");
 
         if ($this->db->getError()) {
             throw new Exception($this->db->getErrorMsg());
@@ -163,7 +163,7 @@ class Users {
     }
 
     private function userExistsWithId($id) {
-        $this->db->newQuery("SELECT Count(*) FROM Users WHERE UID = '" . $this->db->escapeInput($id) . "'");
+        $this->db->newQuery("SELECT Count(*) FROM users WHERE UID = '" . $this->db->escapeInput($id) . "'");
 
         if ($this->db->getError()) {
             throw new Exception($this->db->getErrorMsg());
