@@ -24,7 +24,7 @@ class Users {
 		return json_encode($data);
     }
 
-    public function withId($parameter, $method, $body) {
+    public function withData($parameter, $method, $body) {
         switch ($method) {
             case 'GET':
                 return $this->getWithId($parameter);
