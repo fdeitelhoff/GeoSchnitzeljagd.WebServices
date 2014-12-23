@@ -1,0 +1,5 @@
+#goneo Verzeichnisschutz https://kundencenter.goneo.de
+AuthType Basic
+AuthName "geschützter Bereich"
+AuthUserFile /web/1/000/029/466/83503/.ghtpasswd
+Require user schnitzeljagd
