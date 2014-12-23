@@ -2,5 +2,5 @@
 	RewriteEngine On
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule api/v1/(.+?)(/.*)?$ index.php?request=$1&param=$2 [QSA,NC,L]
+	RewriteRule api/v1/(.+?)(/.*)?$ index.php?request=$1&param=$2 [NC,L]
 </IfModule>

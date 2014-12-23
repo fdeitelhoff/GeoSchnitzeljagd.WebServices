@@ -36,6 +36,22 @@ class Logging {
             $this->db->escapeInput($body). "', '" .
             $this->db->escapeInput($username) . "')");
     }
+
+    public static function all($db) {
+        $db->newQuery("SELECT ID, Method, Route, Parameter, Body, User, Timestamp FROM logging ORDER BY ID DESC");
+
+        if ($db->getError()) {
+            throw new Exception($db->getErrorMsg());
+        }
+
+        $data = array();
+
+        while($result = $db->getObjectResults()) {
+            $data[] = $result;
+        }
+
+        return $data;
+    }
 }
 
 ?>
