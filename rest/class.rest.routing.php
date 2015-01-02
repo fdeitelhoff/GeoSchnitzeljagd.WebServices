@@ -30,13 +30,16 @@ class RestRoute {
 		$method = trim($this->server['REQUEST_METHOD']);
 		$body = trim($body);
 
-		// If someone wants to register or get all users, there's no need te be authorized.
+		// If someone wants to register, get all users or just uses an echo, there's no need te be authorized.
 		switch ($route) {
 			case 'register':
 				return $this->users->register($body);
 				break;
 			case 'users':
 				return $this->users->all();
+				break;
+			case 'echo-body':
+				return $this->echoBody($body);
 				break;
 		}
 
@@ -59,6 +62,10 @@ class RestRoute {
 				return $status->toJson();
 				break;
 		}
+	}
+
+	private function echoBody($body) {
+		return $body;
 	}
 }
 
