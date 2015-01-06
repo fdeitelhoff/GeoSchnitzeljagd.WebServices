@@ -20,7 +20,7 @@ class Paperchase {
             }
         }
 
-        $this->Marks = array(); //new Mark($data);
+        $this->Marks = array();
     }
 
     public function getPid() {

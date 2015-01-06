@@ -43,13 +43,13 @@ class Paperchases {
                 return $this->getWithId($parameter);
                 break;*/
             case 'PUT':
-                return $this->updateUser($body);
+                return $this->updatePaperchase($body);
                 break;
             case 'POST':
                 return $this->createPaperchase($body);
                 break;
             case 'DELETE':
-                return $this->deleteUser($parameter);
+                return $this->deletePaperchase($parameter);
                 break;
         }
     }
@@ -105,8 +105,110 @@ class Paperchases {
         }
     }
 
+    private function updatePaperchase($body) {
+        if (empty($body)) {
+            $status = new RestStatus(400, "Content is missing!");
+            return $status->toJson();
+        }
+
+        $data = json_decode($body, true);
+
+        $paperchase = new Paperchase($data);
+        foreach ($data['Marks'] AS $key => $value) {
+            $paperchase->addMark($value);
+        }
+
+        if (!$this->paperchaseExistsWithId($paperchase->getPid())) {
+            $status = new RestStatus(404, "The paperchase does not exists!");
+            return $status->toJson();
+
+        } else if (!$this->paperchaseExistsWithName($paperchase)) {
+            $timestamp = date('Y-m-d H:m:s');
+
+            $this->db->newQuery("UPDATE paperchases SET Name = '" . $this->db->escapeInput($paperchase->getName()) .
+                "', Timestamp = '" . $timestamp . "' WHERE PID = '" . $this->db->escapeInput($paperchase->getPid()) . "'");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            if ($this->db->getAffectedRowCount() != 1) {
+                $status = new RestStatus(500, "The paperchase was not updated successfully!", $user);
+                return $status->toJson();
+            }
+
+            $paperchase->setTimestamp($timestamp);
+
+            $this->db->newQuery("DELETE FROM marks WHERE PID = '" . $this->db->escapeInput($paperchase->getPid()) . "'");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            foreach ($paperchase->getMarks() AS $key => $value) {
+                $this->db->newQuery("INSERT INTO marks (MID, PID, Hint, Latitude, Longitude, Sequence) VALUES (" .
+                    "'" . $this->db->escapeInput($value->getMid()) . "', '" .
+                    $this->db->escapeInput($value->getPid()) . "', '" .
+                    $this->db->escapeInput($value->getHint()) . "', '" .
+                    $this->db->escapeInput($value->getLatitude()) . "', '" .
+                    $this->db->escapeInput($value->getLongitude()) . "', '" .
+                    $this->db->escapeInput($value->getSequence()) . "')");
+
+                if ($this->db->getError()) {
+                    throw new Exception($this->db->getErrorMsg());
+                }
+            }
+
+            $status = new RestStatus(200, "The paperchase was successfully updated!", $paperchase);
+            return $status->toJson();
+
+        } else {
+            $status = new RestStatus(409, "A paperchase with this name already exists!");
+            return $status->toJson();
+        }
+    }
+
+    private function deletePaperchase($parameter) {
+        if (empty($parameter)) {
+            $status = new RestStatus(400, "Parameters are missing!");
+            return $status->toJson();
+        }
+
+        if ($this->paperchaseExistsWithId($parameter)) {
+            $this->db->newQuery("DELETE FROM paperchases WHERE PID = '" . $this->db->escapeInput($parameter) . "'");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            $this->db->newQuery("DELETE FROM marks WHERE PID = '" . $this->db->escapeInput($parameter) . "'");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            $status = new RestStatus(200, "The paperchase was successfully deleted!");
+            return $status->toJson();
+        }
+        else
+        {
+            $status = new RestStatus(404, "The paperchase does not exists!");
+            return $status->toJson();
+        }
+    }
+
     private function paperchaseExistsWithName($paperchase) {
         $this->db->newQuery("SELECT Count(*) FROM paperchases WHERE Name = '" . $this->db->escapeInput($paperchase->getName()) . "'");
+
+        if ($this->db->getError()) {
+            throw new Exception($this->db->getErrorMsg());
+        }
+
+        return $this->db->getResult() == 0 ? false : true;
+    }
+
+    private function paperchaseExistsWithId($id) {
+        $this->db->newQuery("SELECT Count(*) FROM paperchases WHERE PID = '" . $this->db->escapeInput($id) . "'");
 
         if ($this->db->getError()) {
             throw new Exception($this->db->getErrorMsg());

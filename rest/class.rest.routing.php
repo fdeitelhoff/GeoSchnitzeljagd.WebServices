@@ -44,11 +44,10 @@ class RestRoute {
 		}
 
 		// Check if there is a valid username and password combination.
-		// TODO: Für lokale Testzwecke temporär deaktiviert.
-		/*if (!$this->auth->authorize()) {
+		if (!$this->auth->authorize()) {
 			$status = new RestStatus(401, "You're not authorized!");
 			return $status->toJson();
-		}*/
+		}
 
 		// This API endpoints are only accessible if the client is authorized.
 		switch ($route) {
