@@ -39,9 +39,6 @@ class Paperchases {
 
     public function withData($parameter, $method, $body) {
         switch ($method) {
-            /*case 'GET':
-                return $this->getWithId($parameter);
-                break;*/
             case 'PUT':
                 return $this->updatePaperchase($body);
                 break;
@@ -50,6 +47,14 @@ class Paperchases {
                 break;
             case 'DELETE':
                 return $this->deletePaperchase($parameter);
+                break;
+        }
+    }
+
+    public function completedWithData($parameter, $method, $body) {
+        switch ($method) {
+            case 'POST':
+                return $this->paperchaseCompleted($body);
                 break;
         }
     }
@@ -194,6 +199,33 @@ class Paperchases {
         {
             $status = new RestStatus(404, "The paperchase does not exists!");
             return $status->toJson();
+        }
+    }
+
+    private function paperchaseCompleted($body) {
+        if (empty($body)) {
+            $status = new RestStatus(400, "Content is missing!");
+            return $status->toJson();
+        }
+
+        $paperchaseCompleted = new PaperchaseCompleted(json_decode($body, true));
+
+        if ($this->paperchaseExistsWithId($paperchaseCompleted->getPid())) {
+            $this->db->newQuery("INSERT INTO paperchasecompleted (PID, UID, StartTime, EndTime) VALUES (" .
+                "'" . $this->db->escapeInput($paperchaseCompleted->getPid()) . "', '" .
+                $this->db->escapeInput($paperchaseCompleted->getUid()) . "', '" .
+                $this->db->escapeInput($paperchaseCompleted->getStartTime()) . "', '" .
+                $this->db->escapeInput($paperchaseCompleted->getEndTime()) . "')");
+
+            if ($this->db->getError()) {
+                throw new Exception($this->db->getErrorMsg());
+            }
+
+            $status = new RestStatus(200, "The paperchase was successfully completed!");
+            return $status->toJson();
+        } else {
+             $status = new RestStatus(404, "The paperchase does not exists!");
+             return $status->toJson();
         }
     }
 

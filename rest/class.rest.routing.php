@@ -60,6 +60,9 @@ class RestRoute {
 			case 'paperchase':
 				return $this->paperchases->withData($parameter, $method, $body);
 				break;
+			case 'paperchase-completed':
+				return $this->paperchases->completedWithData($parameter, $method, $body);
+				break;
 			default:
 				$status = new RestStatus(404, "API endpoint not found!");
 				return $status->toJson();
