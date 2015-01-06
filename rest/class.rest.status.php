@@ -29,6 +29,7 @@ class RestStatus {
                       'message' => $this->getResponse(),
                       'data' => empty($this->getData()) ? "" : $this->getData()->toArray());
 
+        // TODO: Pretty print kann hier doch auch raus oder?
         return json_encode($json, JSON_PRETTY_PRINT);
     }
 }

@@ -21,6 +21,8 @@ require_once(__DIR__ . '/../db/class.db.users.php');
 require_once(__DIR__ . '/../db/class.db.paperchases.php');
 
 require_once(__DIR__ . '/../model/class.model.user.php');
+require_once(__DIR__ . '/../model/class.model.paperchase.php');
+require_once(__DIR__ . '/../model/class.model.mark.php');
 
 require_once(__DIR__ . '/../rest/class.rest.routing.php');
 require_once(__DIR__ . '/../rest/class.rest.status.php');
