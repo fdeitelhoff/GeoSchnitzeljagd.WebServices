@@ -20,7 +20,7 @@ class Paperchase {
             }
         }
 
-        $this->Marks[] = new Mark($data);
+        $this->Marks = array(); //new Mark($data);
     }
 
     public function getPid() {
@@ -31,12 +31,24 @@ class Paperchase {
         $this->PID = $pid;
     }
 
+    public function getUid() {
+        return $this->UID;
+    }
+
     public function setUid($uid) {
         $this->UID = $uid;
     }
 
+    public function getName() {
+        return $this->Name;
+    }
+
     public function setName($name) {
         $this->Name = $name;
+    }
+
+    public function getTimestamp() {
+        return $this->Timestamp;
     }
 
     public function setTimestamp($timestamp) {

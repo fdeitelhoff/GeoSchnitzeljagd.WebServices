@@ -25,6 +25,26 @@ class Mark {
         return $this->MID;
     }
 
+    public function getPid() {
+        return $this->PID;
+    }
+
+    public function getLatitude() {
+        return $this->Latitude;
+    }
+
+    public function getLongitude() {
+        return $this->Longitude;
+    }
+
+    public function getHint() {
+        return $this->Hint;
+    }
+
+    public function getSequence() {
+        return $this->Sequence;
+    }
+
     public function toArray() {
         return get_object_vars($this);
     }
