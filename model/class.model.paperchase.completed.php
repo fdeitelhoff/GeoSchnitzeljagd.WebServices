@@ -2,6 +2,7 @@
 
 class PaperchaseCompleted {
 
+    private $PSID;
     private $PID;
     private $UID;
     private $StartTime;
@@ -19,6 +20,10 @@ class PaperchaseCompleted {
         }
     }
 
+    public function setPsid($psid) {
+        $this->PSID = $psid;
+    }
+
     public function getPid() {
         return $this->PID;
     }
@@ -33,6 +38,10 @@ class PaperchaseCompleted {
 
     public function getEndTime() {
         return $this->EndTime;
+    }
+
+    public function toArray() {
+        return get_object_vars($this);
     }
 }
 

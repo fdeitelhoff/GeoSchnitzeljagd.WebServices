@@ -211,8 +211,11 @@ class Paperchases {
         $paperchaseCompleted = new PaperchaseCompleted(json_decode($body, true));
 
         if ($this->paperchaseExistsWithId($paperchaseCompleted->getPid())) {
-            $this->db->newQuery("INSERT INTO paperchasecompleted (PID, UID, StartTime, EndTime) VALUES (" .
-                "'" . $this->db->escapeInput($paperchaseCompleted->getPid()) . "', '" .
+            $id = GUID();
+
+            $this->db->newQuery("INSERT INTO paperchasecompleted (PSID, PID, UID, StartTime, EndTime) VALUES (" .
+                "'" . $this->db->escapeInput($id) . "', '" .
+                $this->db->escapeInput($paperchaseCompleted->getPid()) . "', '" .
                 $this->db->escapeInput($paperchaseCompleted->getUid()) . "', '" .
                 $this->db->escapeInput($paperchaseCompleted->getStartTime()) . "', '" .
                 $this->db->escapeInput($paperchaseCompleted->getEndTime()) . "')");
@@ -221,7 +224,9 @@ class Paperchases {
                 throw new Exception($this->db->getErrorMsg());
             }
 
-            $status = new RestStatus(200, "The paperchase was successfully completed!");
+            $paperchaseCompleted->setPsid($id);
+
+            $status = new RestStatus(200, "The paperchase was successfully completed!", $paperchaseCompleted);
             return $status->toJson();
         } else {
              $status = new RestStatus(404, "The paperchase does not exists!");
